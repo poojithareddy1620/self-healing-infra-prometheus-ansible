@@ -1,0 +1,12 @@
+groups:
+  - name: example_alerts
+    rules:
+      - alert: MyServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Service is down"
+          description: "The service instance {{ $labels.instance }} has been unreachable for more than 1 minute."
+
