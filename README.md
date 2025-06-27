@@ -16,3 +16,36 @@ In modern infrastructure, minimizing downtime is critical. This project automati
 - **EC2 (Amazon Linux 2)** – Host environment
 
 ## ⚙️ Project Str
+.
+├── app.py # Sample monitored Flask app
+├── prometheus/
+│ └── prometheus.yml # Scrape config & alert rules
+├── alertmanager/
+│ └── alertmanager.yml # Alertmanager config
+├── alertmanager-webhook/
+│ ├── webhook_server.py # Flask webhook server
+│ └── requirements.txt # Python dependencies
+
+## 🚀 How It Works
+1. **Prometheus** scrapes metrics from `app.py` on port `8080`.
+2. When the app goes down, **alert rule** fires.
+3. **Alertmanager** sends a POST request to the **Flask webhook server**.
+4. Webhook server runs an **Ansible playbook** to restart the app.
+5. App recovers and Prometheus marks it healthy again.
+
+## ✅ To Run
+```bash
+# Start Flask app
+python3 app.py
+
+# Start Alertmanager
+./alertmanager --config.file=alertmanager.yml
+
+# Start Webhook
+cd alertmanager-webhook
+python3 webhook_server.py
+
+# Start Prometheus
+./prometheus --config.file=prometheus.yml
+📌 Conclusion
+This project showcases the power of combining monitoring, alerting, and automation to build a resilient, self-healing infrastructure — reducing the need for manual intervention during failures.
